@@ -6,7 +6,7 @@ import mysql.connector
 app = Flask(__name__, template_folder="templates")
 
 
-# Initialize Gemini API client (insert your API key)
+# Initialize Gemini API 
 client = genai.Client(api_key="AIzaSyBxaddgnVodOLryhNEAmLiq8U1Mj9xuai8")
 
 def get_db_connection():
@@ -20,7 +20,6 @@ db_config = {
 }
 
 
-# Hard-coded details from Jamia Hamdard (replace with real data or DB calls as needed)
 def get_jamia_details(query):
     query_lower = query.lower()
     if "prospectus" in query_lower:
@@ -147,7 +146,7 @@ def chat():
         )
         full_answer = response.text.strip()
         
-        # Optional post-processing: truncate if the response is too long
+       
         max_length = 300  # character limit example
         if len(full_answer) > max_length:
             full_answer = full_answer[:max_length].rsplit('.', 1)[0] + "."
