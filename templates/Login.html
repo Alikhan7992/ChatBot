@@ -1,254 +1,277 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jamia Hamdard University Admissions Chatbot</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: #f8f9fa;
-    }
-    .container-fluid {
-      height: 100%;
-    }
-   
-    #signupContainer {
-      max-width: 400px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      display: block; /* Show by default */
-    }
-    /* Login container */
-    #loginContainer {
-      max-width: 400px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      display: none; /* Hidden initially */
-    }
-    /* Chat container */
-    #chatContainer {
-      width: 100vw;
-      height: 100vh;
-      display: none; /* Hidden until login */
-      flex-direction: column;
-      background: #fff;
-    }
-    .chat-header {
-      background: #007bff;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-    .chat-body {
-      flex-grow: 1;
-      overflow-y: auto;
-      padding: 20px;
-      background-color: #e9ecef;
-    }
-    .chat-footer {
-      padding: 10px 20px;
-      background: #f1f1f1;
-      flex-shrink: 0;
-    }
-    .message {
-      margin-bottom: 15px;
-    }
-    .message .text {
-      padding: 10px 15px;
-      border-radius: 20px;
-      display: inline-block;
-      max-width: 90%;
-      white-space: pre-wrap;
-    }
-    .message.user .text {
-      background-color: #007bff;
-      color: #fff;
-    }
-    .message.bot .text {
-      background-color: #f8f9fa;
-      color: #333;
-      border: 1px solid #ccc;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamia Hamdard - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo img {
+            height: 60px;
+        }
+        
+        .logo h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .link-text {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .link-text a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .link-text a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <!-- Sign Up Container -->
-    <div id="signupContainer">
-      <h3 class="text-center">Sign Up</h3>
-      <div class="mb-3">
-        <label for="signupUsername" class="form-label">Username</label>
-        <input type="text" class="form-control" id="signupUsername" placeholder="Enter username">
-      </div>
-      <div class="mb-3">
-        <label for="signupPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="signupPassword" placeholder="Enter password">
-      </div>
-      <button class="btn btn-primary w-100" onclick="signUp()">Sign Up</button>
-      <p class="text-center mt-3">Already have an account? <a href="#" onclick="toggleToLogin()">Login</a></p>
-    </div>
-
-    <!-- Login Container -->
-    <div id="loginContainer">
-      <h3 class="text-center">Login</h3>
-      <div class="mb-3">
-        <label for="loginUsername" class="form-label">Username</label>
-        <input type="text" class="form-control" id="loginUsername" placeholder="Enter username">
-      </div>
-      <div class="mb-3">
-        <label for="loginPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="loginPassword" placeholder="Enter password">
-      </div>
-      <button class="btn btn-primary w-100" onclick="login()">Login</button>
-      <p class="text-center mt-3">Don't have an account? <a href="#" onclick="toggleToSignup()">Sign Up</a></p>
-    </div>
-
-    <!-- Chat Container -->
-    <div id="chatContainer">
-      <div class="chat-header">
-        <h4>Jamia Hamdard University Admissions Chatbot</h4>
-      </div>
-      <div class="chat-body" id="chatBody">
-        <!-- Chat messages will appear here -->
-      </div>
-      <div class="chat-footer">
-        <div class="input-group">
-          <input type="text" id="userInput" class="form-control" placeholder="Type your admission query here...">
-          <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+    <div class="container">
+        <div class="logo">
+            <img src="https://via.placeholder.com/60x60" alt="Jamia Hamdard Logo">
+            <h1>Admission Assistant</h1>
         </div>
-      </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="form-control" required>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" required>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            
+            <button type="submit" class="btn">Login</button>
+            
+            <div class="link-text">
+                Don't have an account? <a href="#" id="signupLink">Sign up</a>
+            </div>
+        </form>
+        
+        <form id="signupForm" style="display: none;">
+            <div class="form-group">
+                <label for="newUsername">Username</label>
+                <input type="text" id="newUsername" class="form-control" required>
+                <div class="error-message" id="newUsernameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="newPassword">Password</label>
+                <input type="password" id="newPassword" class="form-control" required>
+                <div class="error-message" id="newPasswordError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" required>
+                <div class="error-message" id="confirmPasswordError"></div>
+            </div>
+            
+            <button type="submit" class="btn">Sign Up</button>
+            
+            <div class="link-text">
+                Already have an account? <a href="#" id="loginLink">Login</a>
+            </div>
+        </form>
     </div>
-  </div>
 
-  <script>
-    function toggleToLogin() {
-      document.getElementById('signupContainer').style.display = 'none';
-      document.getElementById('loginContainer').style.display = 'block';
-    }
-
-    function toggleToSignup() {
-      document.getElementById('loginContainer').style.display = 'none';
-      document.getElementById('signupContainer').style.display = 'block';
-    }
-
-    // Sign Up logic
-    async function signUp() {
-      const username = document.getElementById('signupUsername').value.trim();
-      const password = document.getElementById('signupPassword').value.trim();
-      if (!username || !password) {
-        alert("Please enter both username and password.");
-        return;
-      }
-
-      try {
-        const response = await fetch('/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
+    <script>
+        document.getElementById('signupLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
         });
-        const data = await response.json();
-        if (data.success) {
-          alert("Sign up successful! Please log in.");
-          toggleToLogin();
-        } else {
-          alert(data.error || "Sign up failed.");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Error signing up.");
-      }
-    }
-
-    // Login logic
-    async function login() {
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value.trim();
-      if (!username || !password) {
-        alert("Please enter both username and password.");
-        return;
-      }
-
-      try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
+        
+        document.getElementById('loginLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
         });
-        const data = await response.json();
-        if (data.success) {
-          localStorage.setItem('token', data.token);
-          document.getElementById('loginContainer').style.display = 'none';
-          document.getElementById('signupContainer').style.display = 'none';
-          document.getElementById('chatContainer').style.display = 'flex';
-        } else {
-          alert(data.error || "Login failed.");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Error logging in.");
-      }
-    }
-
-    // Send Message to Chat
-    async function sendMessage() {
-      const userInputElem = document.getElementById('userInput');
-      const userInput = userInputElem.value.trim();
-      if (!userInput) return;
-      const chatBody = document.getElementById('chatBody');
-
-      // Append user's message
-      chatBody.innerHTML += `<div class="message user"><div class="text">${userInput}</div></div>`;
-      userInputElem.value = '';
-      chatBody.scrollTop = chatBody.scrollHeight;
-
-      // Send request to backend with token
-      const token = localStorage.getItem('token');
-      try {
-        const response = await fetch('/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ message: userInput })
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Clear previous errors
+            document.getElementById('usernameError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+            
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    document.getElementById('passwordError').textContent = data.error || 'Invalid credentials';
+                    document.getElementById('passwordError').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
-        if (!response.ok) {
-          if (response.status === 401 || response.status === 403) {
-            chatBody.innerHTML += `<div class="message bot"><div class="text">Unauthorized. Please sign in again.</div></div>`;
-            return;
-          }
-        }
-        const data = await response.json();
-        chatBody.innerHTML += `<div class="message bot"><div class="text">${data.response}</div></div>`;
-        chatBody.scrollTop = chatBody.scrollHeight;
-      } catch (error) {
-        console.error("Error:", error);
-        chatBody.innerHTML += `<div class="message bot"><div class="text">Sorry, an error occurred.</div></div>`;
-      }
-    }
-
-    // Press Enter to send
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('userInput').addEventListener('keydown', function(event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          sendMessage();
-        }
-      });
-    });
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('newUsername').value;
+            const password = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Clear previous errors
+            document.getElementById('newUsernameError').style.display = 'none';
+            document.getElementById('newPasswordError').style.display = 'none';
+            document.getElementById('confirmPasswordError').style.display = 'none';
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                return;
+            }
+            
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById('signupForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                    // Clear form
+                    document.getElementById('newUsername').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                } else {
+                    document.getElementById('newUsernameError').textContent = data.error || 'Registration failed';
+                    document.getElementById('newUsernameError').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 </html>
