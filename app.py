@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
-from google import genai
+from google import genai  
 import mysql.connector
 
 app = Flask(__name__, template_folder="templates")
@@ -22,16 +22,96 @@ def get_db_connection():
 def get_jamia_details(query):
     query_lower = query.lower()
     if "prospectus" in query_lower:
-        prospectus_text = (
-            "Prospectus Content:\n"
-            "------------------------------------------\n"
-            "Welcome to the admissions prospectus for Jamia Hamdard University.\n"
-            "Here you will find details about courses, admission process, eligibility criteria, "
-            "and fee structure.\n"
-            "For more detailed information, please contact our admissions office.\n"
-            "------------------------------------------"
-        )
-        return prospectus_text
+        return """Jamia Hamdard University - Comprehensive Prospectus 2024-25
+═══════════════════════════════════════════════════════════
+
+🏛️ UNIVERSITY OVERVIEW
+----------------------
+- Established: 1989 
+- Accreditations: NAAC 'A' Grade | UGC Recognized
+- Campus: 50+ Acre Green Campus
+- Faculty: 200+ Qualified Educators
+- Location: New Delhi, India
+
+🎓 ACADEMIC PROGRAMS
+--------------------
+UNDERGRADUATE (UG):
+- B.Tech: CSE, ECE, Mechanical, Civil Engineering
+- BBA: General, International Business
+- B.Pharm: Pharmaceutical Sciences 
+- B.Sc: Biotechnology, Chemistry, Physics
+
+POSTGRADUATE (PG):
+- M.Tech: Specializations Available
+- MBA: Finance, Marketing, HR, International Business
+- M.Pharm: Advanced Pharmaceutical Studies
+- M.Sc: All Science Disciplines
+
+DOCTORAL PROGRAMS:
+- PhD: Engineering, Management, Pharmacy, Sciences
+
+📝 ADMISSION PROCESS (2024-25)
+-------------------------------
+1. Online Application Portal Opens: 1 March 2024
+2. Entrance Examination: Program-specific dates
+3. Interview: For selected courses
+4. Merit List Publication
+5. Document Verification:
+   - 10th/12th Marksheets
+   - Transfer/Migration Certificate
+   - Valid ID Proof
+6. Fee Payment & Enrollment
+
+💸 FEE STRUCTURE (Annual)
+-------------------------
+| Program       | Fees       |
+|---------------|------------|
+| B.Tech        | ₹1.25 L    |
+| BBA           | ₹85,000    |
+| MBA           | ₹1.5 L     |
+| B.Pharm       | ₹1.1 L     |
+| Hostel        | ₹60,000    |
+
+🎖️ SCHOLARSHIPS & FINANCIAL AID
+--------------------------------
+- Merit Scholarships: Up to 100% Tuition Fee Waiver
+- Special Categories:
+  - SC/ST Candidates
+  - Differently-Abled Students
+  - Sports Achievers
+  - National Rank Holders
+
+🏫 CAMPUS FACILITIES
+--------------------
+- Digital Library: 100,000+ Volumes & E-Resources
+- Advanced Labs: 15+ Specialized Laboratories
+- Sports Complex: Indoor/Outdoor Facilities
+- Residential Hostels: Separate Accommodation
+- Smart Classrooms: Tech-Enabled Learning
+- 24/7 Wi-Fi: Campus-wide Connectivity
+
+📈 PLACEMENT HIGHLIGHTS (2023)
+-------------------------------
+- Highest Package: ₹22 LPA
+- Average Package: ₹6.5 LPA
+- Top Recruiters:
+  ┌──────────────┬──────────────┐
+  │ Tech Giants  │ Pharma Majors│
+  ├──────────────┼──────────────┤
+  │ Amazon       │ Sun Pharma   │
+  │ TCS          │ Cipla        │
+  │ Infosys      │ Dr. Reddy's  │
+  │ Wipro        │ Biocon       │
+  └──────────────┴──────────────┘
+
+📞 CONTACT INFORMATION
+----------------------
+☎️ Admissions Helpline: +91-11-26059688
+📩 Email: admissions@jamiahamdard.edu
+🌐 Website: www.jamiahamdard.edu
+📑 Download Prospectus: https://ums.jamiahamdard.ac.in/Files/Prospectus.pdf
+═══════════════════════════════════════════════════════════"""
+
     elif "course" in query_lower:
         return (
             "Course Details:\n"
@@ -104,18 +184,13 @@ def signup():
 
 @app.route('/chat', methods=['GET'])
 def chat_page():
-    # Ensure user is logged in
     if 'username' not in session:
         return redirect(url_for('login_page'))
     return render_template('chat.html')
 
 @app.route('/chat', methods=['POST'])
 def chat_api():
-    # Simple token check can be replaced with better auth as needed.
-    # Extract the user's message from JSON payload
     user_input = request.json.get('message')
-    
-    # Handle batch processing if input contains multiple questions
     if isinstance(user_input, list):
         responses = []
         for question in user_input:
@@ -130,13 +205,13 @@ def process_single_question(question):
     details = get_jamia_details(question)
     if details:
         return details
-    
+
     admission_context = (
         "You are a helpful admissions assistant for Jamia Hamdard University. "
-        "Answer ONLY in concise bullet points with no extra commentary, and keep your answer under 40 words. "
+        "Answer ONLY in concise bullet points with no extra commentary, and keep your answer under 200 words. "
         "User query: " + question
     )
-    
+
     try:
         response = client.models.generate_content(
             model="gemini-2.0-flash",
