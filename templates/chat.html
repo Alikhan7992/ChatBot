@@ -257,12 +257,70 @@
                 height: calc(100vh - 200px);
             }
         }
+        
+        /* Add these new styles at the end of existing styles */
+        .bot-message {
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem !important;
+            background-color: #f8f9fa !important;
+            border: 1px solid #dee2e6 !important;
+        }
+        
+        .bot-message .section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .bot-message .section-header {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .bot-message .divider {
+            border-bottom: 2px solid #3498db;
+            margin: 1rem 0;
+        }
+        
+        .bot-message table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.5rem 0;
+        }
+        
+        .bot-message td, .bot-message th {
+            padding: 0.75rem;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+        
+        .bot-message th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .bot-message ul {
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .bot-message li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .bot-message .highlight {
+            color: #3498db;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="https://via.placeholder.com/40x40" alt="Jamia Hamdard Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Jamia_Hamdard_Logo.svg/1200px-Jamia_Hamdard_Logo.svg.png" alt="Jamia Hamdard Logo">
             <h1>Admission Assistant</h1>
         </div>
         <div class="user-info">
@@ -282,6 +340,20 @@
                 <div class="quick-question" data-question="What is the fee structure for MBA?">What is the fee structure for MBA?</div>
             </div>
             
+            <div class="prospectus-download" style="margin: 10px 0; font-size: 14px;">
+              📄 To refer more, kindly see the
+              <a href="https://ums.jamiahamdard.ac.in/Files/Prospectus.pdf" target="_blank" style="color: #007bff; text-decoration: underline;">
+                Prospectus PDF
+              </a>
+            </div>
+            
+            <div class="prospectus-download" style="margin-bottom: 1rem; font-size: 0.95rem;">
+              To refer more kindly go to the prospectus
+              <a href="https://ums.jamiahamdard.ac.in/Files/Prospectus.pdf" target="_blank">
+                https://ums.jamiahamdard.ac.in/Files/Prospectus.pdf
+              </a>
+            </div>      
+
             <div class="batch-questions">
                 <h2><i class="fas fa-tasks"></i> Batch Questions</h2>
                 <textarea id="batchQuestions" placeholder="Enter multiple questions (one per line)" rows="5" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 0.5rem;"></textarea>
@@ -446,22 +518,125 @@
         
         // Add message to chat
         function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}-message`;
-            
-            const messageContent = document.createElement('div');
-            messageContent.textContent = text;
-            messageDiv.appendChild(messageContent);
-            
-            const timeDiv = document.createElement('div');
-            timeDiv.className = 'message-time';
-            timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            messageDiv.appendChild(timeDiv);
-            
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+
+    if (sender === 'bot') {
+        // Create a container for formatted content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'formatted-response';
+
+        // Split the text into lines and process each line
+        const lines = text.split('\n');
+        let inTable = false;
+        let tableContent = [];
+
+        lines.forEach(line => {
+            const trimmedLine = line.trim();
+
+            // Handle section headers
+            if (trimmedLine.startsWith('🏛️') || trimmedLine.startsWith('🎓') || 
+                trimmedLine.startsWith('📝') || trimmedLine.startsWith('💸')) {
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.innerHTML = `<i class="fas fa-${getIconForHeader(trimmedLine)}"></i> ${trimmedLine}`;
+                contentDiv.appendChild(header);
+            }
+            // Handle dividers
+            else if (trimmedLine.startsWith('══') || trimmedLine.startsWith('──')) {
+                const divider = document.createElement('div');
+                divider.className = 'divider';
+                contentDiv.appendChild(divider);
+            }
+            // Handle tables
+            else if (trimmedLine.includes('│') || trimmedLine.includes('┌')) {
+                if (!inTable) {
+                    tableContent = [];
+                    inTable = true;
+                }
+                tableContent.push(line);
+            }
+            // Handle regular content
+            else {
+                if (inTable) {
+                    // Process accumulated table content
+                    const table = createTable(tableContent);
+                    contentDiv.appendChild(table);
+                    tableContent = [];
+                    inTable = false;
+                }
+
+                const p = document.createElement('p');
+                p.innerHTML = formatLine(line);
+                contentDiv.appendChild(p);
+            }
+        });
+
+        // Add any remaining table content
+        if (inTable && tableContent.length > 0) {
+            const table = createTable(tableContent);
+            contentDiv.appendChild(table);
         }
+
+        messageDiv.appendChild(contentDiv);
+    } else {
+        // User message remains simple
+        const messageContent = document.createElement('div');
+        messageContent.textContent = text;
+        messageDiv.appendChild(messageContent);
+    }
+
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'message-time';
+    timeDiv.textContent = new Date().toLocaleTimeString([], { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    messageDiv.appendChild(timeDiv);
+
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Helper functions for formatting
+function getIconForHeader(line) {
+    const icons = {
+        '🏛️': 'university',
+        '🎓': 'graduation-cap',
+        '📝': 'edit',
+        '💸': 'money-bill-wave',
+        '🎖️': 'award',
+        '🏫': 'building',
+        '📈': 'chart-line',
+        '📞': 'phone'
+    };
+    const emoji = line.substring(0, 2);
+    return icons[emoji] || 'circle-info';
+}
+
+function formatLine(line) {
+    return line
+        .replace(/(₹[0-9,.]+)/g, '<span class="highlight">$1</span>')
+        .replace(/(http[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+}
+
+function createTable(lines) {
+    const table = document.createElement('table');
+    lines.forEach((line, index) => {
+        const tr = document.createElement('tr');
         
+        line.split('│').forEach(cell => {
+            const td = document.createElement(index === 0 ? 'th' : 'td');
+            td.innerHTML = cell.trim().replace(/┌|┬|└|┘|├|┤|─/g, '');
+            tr.appendChild(td);
+        });
+        
+        table.appendChild(tr);
+    });
+    return table;
+}
+
+
         // Send button click handler
         sendBtn.addEventListener('click', sendMessage);
         
