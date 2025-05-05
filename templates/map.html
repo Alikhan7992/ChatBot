@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Jamia Hamdard Map</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps.css"
+    />
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps-web.min.js"></script>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const jamiaCoordinates = [77.2521, 28.5166]; // [lng, lat]
+
+      var map = tt.map({
+        key: "OMCQTw1BGU853HsiIKCsuvbWje1U5w3Q", // Replace with your actual key
+        container: "map",
+        center: jamiaCoordinates,
+        zoom: 15
+      });
+
+      var marker = new tt.Marker().setLngLat(jamiaCoordinates).addTo(map);
+    </script>
+  </body>
+</html>
