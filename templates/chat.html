@@ -47,25 +47,40 @@
         .logo {
             display: flex;
             align-items: center;
+            background-color: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background-color: rgba(255,255,255,0.2);
         }
         
         .logo img {
-            height: 40px;
+            height: 50px;
             margin-right: 1rem;
+            border-radius: 4px;
+            border: 2px solid white;
+            padding: 2px;
         }
         
-        .logo h1 {
-            font-size: 1.25rem;
-            font-weight: 500;
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         
         .user-info {
             display: flex;
             align-items: center;
-        }
-        
-        .user-info span {
-            margin-right: 1rem;
+            gap: 1rem;
         }
         
         .logout-btn {
@@ -162,164 +177,273 @@
             font-size: 1.25rem;
             color: var(--primary);
         }
-        
+
+        /* Updated Chat Messages Styles */
         .chat-messages {
             flex: 1;
-            padding: 1.5rem 2rem;
+            padding: 1rem;
             overflow-y: auto;
             background-color: #f9f9f9;
         }
-        
+
         .message {
             margin-bottom: 1.5rem;
-            max-width: 80%;
+            max-width: 90%;
+            width: 100%;
         }
-        
+
         .user-message {
             margin-left: auto;
-            background-color: var(--secondary);
-            color: white;
-            padding: 0.75rem 1.25rem;
-            border-radius: 18px 18px 0 18px;
+            background-color: #f7f7f8;
+            color: var(--dark);
+            padding: 0;
+            border-radius: 8px;
+            border: 1px solid #e5e5e6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        
+
         .bot-message {
             margin-right: auto;
-            background-color: white;
+            background-color: #f7f7f8;
             color: var(--dark);
-            padding: 0.75rem 1.25rem;
-            border-radius: 18px 18px 18px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            border-radius: 8px;
+            border: 1px solid #e5e5e6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
-        
+
+        .message-header {
+            background-color: #f0f0f0;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid #e5e5e6;
+        }
+
+        .message-content {
+            padding: 1rem;
+        }
+
+        .message-content pre {
+            white-space: pre-wrap;
+            font-family: inherit;
+            background-color: #f7f7f8;
+            padding: 0.75rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .message-content code {
+            font-family: 'Courier New', monospace;
+            background-color: #f0f0f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .message-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.75rem 0;
+        }
+
+        .message-content table th,
+        .message-content table td {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+        }
+
+        .message-content table th {
+            background-color: #f0f0f0;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            padding-left: 1.5rem;
+            margin: 0.75rem 0;
+        }
+
+        .message-content li {
+            margin-bottom: 0.5rem;
+        }
+
         .message-time {
             font-size: 0.75rem;
             color: #95a5a6;
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
             text-align: right;
+            padding: 0 1rem 0.5rem;
         }
-        
+
+        .copy-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .copy-btn:hover {
+            color: var(--secondary);
+        }
+
+        /* Updated Chat Input Styles */
         .chat-input-container {
-            padding: 1rem 2rem;
-            border-top: 1px solid #eee;
+            padding: 1rem;
             background-color: white;
-            flex-shrink: 0;
+            border-top: 1px solid #e5e5e6;
         }
-        
+
         .chat-input {
             display: flex;
             align-items: center;
+            border: 1px solid #e5e5e6;
+            border-radius: 8px;
+            overflow: hidden;
         }
-        
+
         .chat-input textarea {
             flex: 1;
             padding: 0.75rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: none;
             resize: none;
             max-height: 150px;
             font-size: 1rem;
-            transition: all 0.3s;
-        }
-        
-        .chat-input textarea:focus {
             outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
-        
+
         .send-btn {
             background: var(--secondary);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-left: 1rem;
+            padding: 0.75rem 1rem;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        
+
         .send-btn:hover {
             background: #2980b9;
-            transform: scale(1.05);
         }
-        
+
         .send-btn:disabled {
             background: #95a5a6;
             cursor: not-allowed;
         }
-        
-        .batch-mode {
+
+        .chat-options {
             display: flex;
-            align-items: center;
-            margin-top: 1rem;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
-        
-        .batch-mode label {
-            margin-left: 0.5rem;
-            font-size: 0.9rem;
-        }
-        
-        /* Formatted message styles */
-        .bot-message {
-            white-space: pre-wrap;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 1rem !important;
-            background-color: #f8f9fa !important;
-            border: 1px solid #dee2e6 !important;
-        }
-        
-        .bot-message .section {
-            margin-bottom: 1.5rem;
-        }
-        
-        .bot-message .section-header {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+
+        .option-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
-        .bot-message .divider {
-            border-bottom: 2px solid #3498db;
-            margin: 1rem 0;
+
+        .option-btn:hover {
+            background: #e5e5e6;
         }
-        
-        .bot-message table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0.5rem 0;
-        }
-        
-        .bot-message td, .bot-message th {
-            padding: 0.75rem;
-            border: 1px solid #dee2e6;
-            text-align: left;
-        }
-        
-        .bot-message th {
-            background-color: #3498db;
-            color: white;
-        }
-        
-        .bot-message ul {
-            padding-left: 1.5rem;
-            margin: 0.5rem 0;
-        }
-        
-        .bot-message li {
-            margin-bottom: 0.25rem;
-        }
-        
-        .bot-message .highlight {
+
+        /* Formatted message styles */
+        .highlight {
             color: #3498db;
             font-weight: 500;
+        }
+        
+        .map-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .map-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Details modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .modal-btn-primary {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #f1f1f1;
+            color: var(--dark);
+            border: none;
         }
         
         /* Custom scrollbar */
@@ -357,14 +481,22 @@
             .chat-container {
                 height: calc(100vh - 200px);
             }
+            
+            .modal-content {
+                margin: 20% auto;
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Jamia_Hamdard_Logo.svg/1200px-Jamia_Hamdard_Logo.svg.png" alt="Jamia Hamdard Logo">
-            <h1>Admission Assistant</h1>
+            <img src="https://www.jamiahamdard.edu/images/logo.png" alt="Jamia Hamdard Logo">
+            <div class="logo-text">
+                <h1>Jamia Hamdard</h1>
+                <p>Admission Assistant Portal</p>
+            </div>
         </div>
         <div class="user-info">
             <span>Welcome, <span id="usernameDisplay"></span></span>
@@ -383,10 +515,11 @@
                     <div class="quick-question" data-question="What are the eligibility criteria for B.Tech?">What are the eligibility criteria for B.Tech?</div>
                     <div class="quick-question" data-question="What is the fee structure for MBA?">What is the fee structure for MBA?</div>
                     <div class="quick-question" data-question="How can I apply for admission?">How can I apply for admission?</div>
-                    <div class="quick-question" data-question="📍 Where is the campus located?">📍 Where is the campus located?</div>
+                    <div class="quick-question" data-question="📍 Where is the campus location?">📍 Where is the campus located?</div>
                     <div class="quick-question" data-question="🏠 Is hostel facility available?">🏠 Is hostel facility available?</div>
                     <div class="quick-question" data-question="💼 What are the placement stats of Jamia Hamdard?">💼 What are the placement stats of Jamia Hamdard?</div>
                     <div class="quick-question" data-question="📞 How can I contact the admission office?">📞 How can I contact the admission office?</div>
+                    <div class="quick-question" data-question="Show campus picture">Show campus picture</div>
                 </div>
                 
                 <div class="batch-questions">
@@ -403,9 +536,17 @@
             </div>
             
             <div class="chat-messages" id="chatMessages">
-                <!-- Messages will appear here -->
                 <div class="message bot-message">
-                   <b> Welcome to Jamia Hamdard Admission Assistant! How can I help you today?</b>
+                    <div class="message-header">
+                        <i class="fas fa-robot"></i>
+                        <span>Jamia Hamdard Assistant</span>
+                        <button class="copy-btn">
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="message-content">
+                        <b>Welcome to Jamia Hamdard Admission Assistant! How can I help you today?</b>
+                    </div>
                     <div class="message-time">Just now</div>
                 </div>
             </div>
@@ -418,11 +559,57 @@
                     </button>
                 </div>
                 
-                <div class="batch-mode">
-                    <input type="checkbox" id="batchMode">
-                    <label for="batchMode">Batch Mode (Process multiple questions at once)</label>
+                <div class="chat-options">
+                    <button class="option-btn" id="newChatBtn">
+                        <i class="fas fa-plus"></i> New Chat
+                    </button>
+                   
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Details Collection Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-info-circle"></i> Please provide admission details</h3>
+            <form id="detailsForm">
+                <div class="form-group">
+                    <label for="program">Program of Interest:</label>
+                    <select id="program" name="program" required>
+                        <option value="">-- Select Program --</option>
+                        <option value="B.Pharm">B.Pharm</option>
+                        <option value="MBA">MBA</option>
+                        <option value="BA LLB">BA LLB</option>
+                        <option value="B.Tech">B.Tech</option>
+                        <option value="BBA">BBA</option>
+                        <option value="M.Tech">M.Tech</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="General">General</option>
+                        <option value="Muslim Minority">Muslim Minority</option>
+                        <option value="SC/ST">SC/ST</option>
+                        <option value="OBC">OBC</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year">Year of Admission:</label>
+                    <select id="year" name="year" required>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="modal-btn modal-btn-secondary" id="cancelDetails">Cancel</button>
+                    <button type="submit" class="modal-btn modal-btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -447,6 +634,14 @@
         const batchMode = document.getElementById('batchMode');
         const batchQuestions = document.getElementById('batchQuestions');
         const submitBatch = document.getElementById('submitBatch');
+        const detailsModal = document.getElementById('detailsModal');
+        const detailsForm = document.getElementById('detailsForm');
+        const cancelDetails = document.getElementById('cancelDetails');
+        const newChatBtn = document.getElementById('newChatBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        
+        // Store the pending question that triggered the details modal
+        let pendingQuestion = null;
         
         // Enable/disable send button based on input
         userInput.addEventListener('input', function() {
@@ -478,6 +673,30 @@
             });
         });
         
+        // New chat button
+        newChatBtn.addEventListener('click', function() {
+            chatMessages.innerHTML = `
+                <div class="message bot-message">
+                    <div class="message-header">
+                        <i class="fas fa-robot"></i>
+                        <span>Jamia Hamdard Assistant</span>
+                        <button class="copy-btn">
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="message-content">
+                        <b>Welcome to Jamia Hamdard Admission Assistant! How can I help you today?</b>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            `;
+        });
+        
+        // Upload button (placeholder functionality)
+        uploadBtn.addEventListener('click', function() {
+            alert("Upload functionality will be implemented soon!");
+        });
+        
         // Send message function
         function sendMessage() {
             const message = userInput.value.trim();
@@ -491,19 +710,163 @@
             userInput.style.height = 'auto';
             sendBtn.disabled = true;
             
+            // Check if we need details for this question
+            if (needsDetails(message) && !hasDetails()) {
+                pendingQuestion = message;
+                showDetailsModal();
+                return;
+            }
+            
             // Send to server
+            processQuestion(message);
+        }
+        
+        // Check if a question requires admission details
+        function needsDetails(question) {
+            const lowerQuestion = question.toLowerCase();
+            return lowerQuestion.includes('fee') || 
+                   lowerQuestion.includes('admission') || 
+                   lowerQuestion.includes('eligibility') || 
+                   lowerQuestion.includes('program');
+        }
+        
+        // Check if we have stored details
+        function hasDetails() {
+            return localStorage.getItem('program') && 
+                   localStorage.getItem('category') && 
+                   localStorage.getItem('year');
+        }
+        
+        // Show details collection modal
+        function showDetailsModal() {
+            detailsModal.style.display = 'block';
+            
+            // Pre-fill if we have existing details
+            if (hasDetails()) {
+                document.getElementById('program').value = localStorage.getItem('program');
+                document.getElementById('category').value = localStorage.getItem('category');
+                document.getElementById('year').value = localStorage.getItem('year');
+            }
+        }
+        
+        // Hide details modal
+        function hideDetailsModal() {
+            detailsModal.style.display = 'none';
+        }
+        
+        // Handle details form submission
+        detailsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const program = document.getElementById('program').value;
+            const category = document.getElementById('category').value;
+            const year = document.getElementById('year').value;
+            
+            // Save to localStorage
+            localStorage.setItem('program', program);
+            localStorage.setItem('category', category);
+            localStorage.setItem('year', year);
+            
+            // Send to server
+            fetch('/submit_details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    program: program,
+                    category: category,
+                    year: year
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    hideDetailsModal();
+                    
+                    // Add confirmation message
+                    addMessage(`Admission details saved for ${program} (${year})`, 'bot');
+                    
+                    // Process the pending question if we have one
+                    if (pendingQuestion) {
+                        processQuestion(pendingQuestion);
+                        pendingQuestion = null;
+                    }
+                }
+            });
+        });
+        
+        // Cancel details collection
+        cancelDetails.addEventListener('click', function() {
+            hideDetailsModal();
+            pendingQuestion = null;
+        });
+        
+        // Process a question (send to server and handle response)
+        function processQuestion(question) {
             fetch('/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    message: message
+                    message: question
                 })
             })
             .then(response => response.json())
             .then(data => {
-                addMessage(data.response, 'bot');
+                if (data.needs_details) {
+                    pendingQuestion = question;
+                    showDetailsModal();
+                }
+                else if (data.map_redirect) {
+                    // Create a clickable map link
+                    const mapMessage = `${data.response} <a class="map-link" onclick="window.open('${data.map_redirect}', '_blank')">View on Map</a>`;
+                    addMessage(mapMessage, 'bot');
+                } 
+                else if (data.image_url) {
+                    // Add image response
+                    const img = document.createElement('img');
+                    img.src = data.image_url;
+                    img.alt = 'Jamia Hamdard Campus';
+                    img.style.maxWidth = '100%';
+                    img.style.borderRadius = '8px';
+                    img.style.marginTop = '0.5rem';
+                    
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message bot-message';
+                    
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'message-header';
+                    headerDiv.innerHTML = `
+                        <i class="fas fa-robot"></i>
+                        <span>Jamia Hamdard Assistant</span>
+                        <button class="copy-btn">
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                    `;
+                    
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'message-content';
+                    contentDiv.innerHTML = `<p>${data.response}</p>`;
+                    contentDiv.appendChild(img);
+                    
+                    const timeDiv = document.createElement('div');
+                    timeDiv.className = 'message-time';
+                    timeDiv.textContent = new Date().toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                    
+                    messageDiv.appendChild(headerDiv);
+                    messageDiv.appendChild(contentDiv);
+                    messageDiv.appendChild(timeDiv);
+                    chatMessages.appendChild(messageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+                else {
+                    addMessage(data.response, 'bot');
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -540,12 +903,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.responses) {
-                    // Multiple responses
                     data.responses.forEach((response, index) => {
                         addMessage(`Question ${index + 1}: ${response}`, 'bot');
                     });
                 } else {
-                    // Single response (fallback)
                     addMessage(data.response, 'bot');
                 }
             })
@@ -560,71 +921,64 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
 
+            // Create header
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'message-header';
+            
             if (sender === 'bot') {
-                // Create a container for formatted content
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'formatted-response';
-
-                // Split the text into lines and process each line
-                const lines = text.split('\n');
-                let inTable = false;
-                let tableContent = [];
-
-                lines.forEach(line => {
-                    const trimmedLine = line.trim();
-
-                    // Handle section headers
-                    if (trimmedLine.startsWith('🏛️') || trimmedLine.startsWith('🎓') || 
-                        trimmedLine.startsWith('📝') || trimmedLine.startsWith('💸')) {
-                        const header = document.createElement('div');
-                        header.className = 'section-header';
-                        header.innerHTML = `<i class="fas fa-${getIconForHeader(trimmedLine)}"></i> ${trimmedLine}`;
-                        contentDiv.appendChild(header);
-                    }
-                    // Handle dividers
-                    else if (trimmedLine.startsWith('══') || trimmedLine.startsWith('──')) {
-                        const divider = document.createElement('div');
-                        divider.className = 'divider';
-                        contentDiv.appendChild(divider);
-                    }
-                    // Handle tables
-                    else if (trimmedLine.includes('│') || trimmedLine.includes('┌')) {
-                        if (!inTable) {
-                            tableContent = [];
-                            inTable = true;
-                        }
-                        tableContent.push(line);
-                    }
-                    // Handle regular content
-                    else {
-                        if (inTable) {
-                            // Process accumulated table content
-                            const table = createTable(tableContent);
-                            contentDiv.appendChild(table);
-                            tableContent = [];
-                            inTable = false;
-                        }
-
-                        const p = document.createElement('p');
-                        p.innerHTML = formatLine(line);
-                        contentDiv.appendChild(p);
-                    }
+                // Bot message header
+                headerDiv.innerHTML = `
+                    <i class="fas fa-robot"></i>
+                    <span>Jamia Hamdard Assistant</span>
+                    <button class="copy-btn">
+                        <i class="far fa-copy"></i> Copy
+                    </button>
+                `;
+                
+                // Add copy functionality
+                const copyBtn = headerDiv.querySelector('.copy-btn');
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(text);
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
+                    }, 2000);
                 });
-
-                // Add any remaining table content
-                if (inTable && tableContent.length > 0) {
-                    const table = createTable(tableContent);
-                    contentDiv.appendChild(table);
-                }
-
-                messageDiv.appendChild(contentDiv);
             } else {
-                // User message remains simple
-                const messageContent = document.createElement('div');
-                messageContent.textContent = text;
-                messageDiv.appendChild(messageContent);
+                // User message header
+                headerDiv.innerHTML = `
+                    <i class="fas fa-user"></i>
+                    <span>You</span>
+                `;
+            }
+            
+            messageDiv.appendChild(headerDiv);
+
+            // Create content area
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            if (sender === 'bot') {
+                // Check for special messages (like saved details)
+                if (text.startsWith('Admission details saved')) {
+                    contentDiv.innerHTML = `<p style="color: var(--success);"><i class="fas fa-check-circle"></i> ${text}</p>`;
+                } 
+                // Check for map links
+                else if (text.includes('map-link')) {
+                    contentDiv.innerHTML = text;
+                }
+                else {
+                    // Process formatted text
+                    contentDiv.innerHTML = formatBotResponse(text);
+                }
+            } else {
+                // User message content
+                contentDiv.textContent = text;
             }
 
+            messageDiv.appendChild(contentDiv);
+
+            // Add timestamp
             const timeDiv = document.createElement('div');
             timeDiv.className = 'message-time';
             timeDiv.textContent = new Date().toLocaleTimeString([], { 
@@ -637,58 +991,43 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Helper functions for formatting
-        function getIconForHeader(line) {
-            const icons = {
-                '🏛️': 'university',
-                '🎓': 'graduation-cap',
-                '📝': 'edit',
-                '💸': 'money-bill-wave',
-                '🎖️': 'award',
-                '🏫': 'building',
-                '📈': 'chart-line',
-                '📞': 'phone'
-            };
-            const emoji = line.substring(0, 2);
-            return icons[emoji] || 'circle-info';
-        }
-
-        function formatLine(line) {
-            return line
-                .replace(/(₹[0-9,.]+)/g, '<span class="highlight">$1</span>')
-                .replace(/(http[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
-        }
-
-        function createTable(lines) {
-            const table = document.createElement('table');
-            lines.forEach((line, index) => {
-                const tr = document.createElement('tr');
-                
-                line.split('│').forEach(cell => {
-                    const td = document.createElement(index === 0 ? 'th' : 'td');
-                    td.innerHTML = cell.trim().replace(/┌|┬|└|┘|├|┤|─/g, '');
-                    tr.appendChild(td);
-                });
-                
-                table.appendChild(tr);
+        // Format bot responses with proper styling
+        function formatBotResponse(text) {
+            // Replace markdown-style formatting
+            let html = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/_(.*?)_/g, '<em>$1</em>')
+                .replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+            
+            // Format tables
+            html = html.replace(/\| (.*?) \| (.*?) \|<br>/g, function(match, p1, p2) {
+                return `<table><tr><th>${p1}</th><th>${p2}</th></tr>`;
             });
-            return table;
+            html = html.replace(/\|───────\|───────\|<br>/g, '</table>');
+            
+            // Format lists
+            html = html.replace(/• (.*?)<br>/g, '<li>$1</li>');
+            html = html.replace(/<li>.*?<\/li>/g, function(match) {
+                if (!match.includes('<ul>')) {
+                    return `<ul>${match}</ul>`;
+                }
+                return match;
+            });
+            
+            // Format links
+            html = html.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+            
+            // Highlight important information
+            html = html.replace(/₹([0-9,.]+)/g, '<span class="highlight">₹$1</span>');
+            
+            return html;
         }
-
+        
         // Send button click handler
         sendBtn.addEventListener('click', sendMessage);
-        
-        // Toggle batch mode
-        batchMode.addEventListener('change', function() {
-            if (this.checked) {
-                userInput.placeholder = "Enter multiple questions (one per line)";
-                userInput.rows = 3;
-            } else {
-                userInput.placeholder = "Type your question here...";
-                userInput.rows = 1;
-                userInput.style.height = 'auto';
-            }
-        });
     </script>
 </body>
 </html>
