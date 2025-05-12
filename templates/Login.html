@@ -123,12 +123,33 @@
             margin-top: 0.5rem;
             display: none;
         }
+        
+        .guest-login {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .guest-btn {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .guest-btn:hover {
+            background: #7f8c8d;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Jamia_Hamdard_Logo.svg/1200px-Jamia_Hamdard_Logo.svg.png"  alt="Jamia Hamdard Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/Jamia_Hamdard_Logo.svg/1200px-Jamia_Hamdard_Logo.svg.png" alt="Jamia Hamdard Logo">
             <h1>Admission Assistant</h1>
         </div>
         
@@ -160,6 +181,18 @@
             </div>
             
             <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" required>
+                <div class="error-message" id="emailError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" class="form-control" required>
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            
+            <div class="form-group">
                 <label for="newPassword">Password</label>
                 <input type="password" id="newPassword" class="form-control" required>
                 <div class="error-message" id="newPasswordError"></div>
@@ -177,6 +210,11 @@
                 Already have an account? <a href="#" id="loginLink">Login</a>
             </div>
         </form>
+        
+        <div class="guest-login">
+            <button class="guest-btn" id="guestLoginBtn">Continue as Guest</button>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #7f8c8d;">Limited functionality for guest users</p>
+        </div>
     </div>
 
     <script>
@@ -184,12 +222,14 @@
             e.preventDefault();
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('signupForm').style.display = 'block';
+            document.querySelector('.guest-login').style.display = 'none';
         });
         
         document.getElementById('loginLink').addEventListener('click', function(e) {
             e.preventDefault();
             document.getElementById('signupForm').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
+            document.querySelector('.guest-login').style.display = 'block';
         });
         
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -228,11 +268,15 @@
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('newUsername').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
             const password = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             
             // Clear previous errors
             document.getElementById('newUsernameError').style.display = 'none';
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('phoneError').style.display = 'none';
             document.getElementById('newPasswordError').style.display = 'none';
             document.getElementById('confirmPasswordError').style.display = 'none';
             
@@ -250,6 +294,8 @@
                 },
                 body: JSON.stringify({
                     username: username,
+                    email: email,
+                    phone: phone,
                     password: password
                 })
             })
@@ -259,13 +305,35 @@
                     alert(data.message);
                     document.getElementById('signupForm').style.display = 'none';
                     document.getElementById('loginForm').style.display = 'block';
+                    document.querySelector('.guest-login').style.display = 'block';
                     // Clear form
                     document.getElementById('newUsername').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('phone').value = '';
                     document.getElementById('newPassword').value = '';
                     document.getElementById('confirmPassword').value = '';
                 } else {
                     document.getElementById('newUsernameError').textContent = data.error || 'Registration failed';
                     document.getElementById('newUsernameError').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+        
+        document.getElementById('guestLoginBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('/guest_login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
                 }
             })
             .catch(error => {
