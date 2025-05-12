@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from google import genai  
 import mysql.connector
+import re
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = "your_secret_key"  # Change this to a secure secret key
@@ -19,8 +20,16 @@ db_config = {
 def get_db_connection():
     return mysql.connector.connect(**db_config)
 
+def validate_email(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email)
+
+def validate_phone(phone):
+    pattern = r'^[0-9]{10,15}$'
+    return re.match(pattern, phone)
+
 def get_jamia_details(query, program=None, category=None, year=None):
-    """<strong>Get university details with formatted responses</strong>"""
+    """Get university details with formatted responses"""
     query_lower = query.lower()
     
     # Admission process with context
@@ -166,7 +175,7 @@ def get_jamia_details(query, program=None, category=None, year=None):
             ". <strong>Minority Scholarship:</strong> 25% for eligible students\n"
             ". <strong>SC/ST Scholarship:</strong> Full tuition fee waiver\n"
             ". <strong>Sports Scholarship:</strong> 25-100% waiver\n\n"
-            "<strong>📝 Apply through:</strong> scholarships@jamiahamdard.edu"
+            "<strong>📝 Apply through:</strong> https://www.jamiahamdard.ac.in/scholarships-and-freeships?title=Scholarships%20&%20Freeships"
         )
     
     elif "placement" in query_lower or "career" in query_lower:
@@ -192,19 +201,19 @@ def get_jamia_details(query, program=None, category=None, year=None):
 # Routes
 @app.route('/')
 def home():
-    """<strong>Home route - redirects to login</strong>"""
+    """Home route - redirects to login"""
     return redirect(url_for('login_page'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    """<strong>Handle user login</strong>"""
+    """Handle user login"""
     if request.method == 'POST':
         data = request.json if request.is_json else request.form
         username = data.get('username')
         password = data.get('password')
         
         if not username or not password:
-            return jsonify({"error": "<strong>Username and password are required</strong>"}), 400
+            return jsonify({"error": "Username and password are required"}), 400
         
         try:
             conn = get_db_connection()
@@ -215,55 +224,75 @@ def login_page():
             
             if user:
                 session['username'] = username
+                session['is_guest'] = False
                 return jsonify({"success": True, "redirect": url_for('chat_page')})
             else:
-                return jsonify({"success": False, "error": "<strong>Invalid credentials</strong>"}), 401
+                return jsonify({"success": False, "error": "Invalid credentials"}), 401
         except mysql.connector.Error as e:
             return jsonify({"error": str(e)}), 500
     else:
         return render_template('login.html')
 
+@app.route('/guest_login', methods=['POST'])
+def guest_login():
+    """Handle guest login"""
+    session['username'] = 'Guest'
+    session['is_guest'] = True
+    return jsonify({"success": True, "redirect": url_for('chat_page')})
+
 @app.route('/signup', methods=['POST'])
 def signup():
-    """<strong>Handle new user registration</strong>"""
+    """Handle new user registration"""
     data = request.json if request.is_json else request.form
     username = data.get('username')
+    Email = data.get('email')
+    Phone_Number = data.get('Phone_Number')
     password = data.get('password')
     
-    if not username or not password:
-        return jsonify({"error": "<strong>Username and password are required</strong>"}), 400
+    if not username or not password or not Email or not Phone_Number:
+        return jsonify({"error": "All fields are required"}), 400
+    
+    # Validate email format
+    if not validate_email(Email):
+        return jsonify({"error": "Please enter a valid email address"}), 400
+    
+    # Validate phone format
+    if not validate_phone(Phone_Number):
+        return jsonify({"error": "Please enter a valid Phone_Number (10-15 digits)"}), 400
     
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE user_name = %s", (username,))
+        cursor.execute("SELECT * FROM users WHERE user_name = %s OR email = %s", (username, Email))
         
         if cursor.fetchone():
-            return jsonify({"error": "<strong>User already exists</strong>"}), 400
+            return jsonify({"error": "Username or email already exists"}), 400
         
-        cursor.execute("INSERT INTO users (user_name, password) VALUES (%s, %s)", (username, password))
+        cursor.execute("INSERT INTO users (user_name, email, Phone_Number, password) VALUES (%s, %s, %s, %s)", 
+                      (username, Email, Phone_Number, password))
         conn.commit()
         conn.close()
-        return jsonify({"success": True, "message": "<strong>User registered successfully!</strong>"}), 201
+        return jsonify({"success": True, "message": "User registered successfully!"}), 201
     except mysql.connector.Error as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    """<strong>Handle user logout</strong>"""
+    """Handle user logout"""
     session.pop('username', None)
+    session.pop('is_guest', None)
     return jsonify({"success": True})
 
 @app.route('/chat', methods=['GET'])
 def chat_page():
-    """<strong>Render chat interface</strong>"""
+    """Render chat interface"""
     if 'username' not in session:
         return redirect(url_for('login_page'))
-    return render_template('chat.html')
+    return render_template('chat.html', username=session['username'], is_guest=session.get('is_guest', False))
 
 @app.route('/map')
 def map_page():
-    """<strong>Render map page</strong>"""
+    """Render map page"""
     if 'username' not in session:
         return redirect(url_for('login_page'))
     
@@ -277,9 +306,9 @@ def map_page():
 
 @app.route('/chat', methods=['POST'])
 def chat_api():
-    """<strong>Handle chat requests</strong>"""
+    """Handle chat requests"""
     if 'username' not in session:
-        return jsonify({"error": "<strong>Unauthorized</strong>"}), 401
+        return jsonify({"error": "Unauthorized"}), 401
     
     user_input = request.json.get('message')
     
@@ -288,19 +317,19 @@ def chat_api():
     
     if response == "MAP_RESPONSE":
         return jsonify({
-            "response": "<strong>Here's the location of Jamia Hamdard:</strong>",
+            "response": "Here's the location of Jamia Hamdard:",
             "map_redirect": url_for('map_page')
         })
     elif response == "CAMPUS_IMAGE":
         return jsonify({
-            "response": "<strong>Jamia Hamdard Campus:</strong>",
+            "response": "Jamia Hamdard Campus:",
             "image_url": "https://collegeadvisors.in/wp-content/uploads/2023/11/Jamia-Hamdard-University-campus.jpeg"
         })
     
     return jsonify({"response": response})
 
 def process_single_question(question):
-    """<strong>Process a single question and return response</strong>"""
+    """Process a single question and return response"""
     # First check our predefined responses
     details = get_jamia_details(question)
     if details:
@@ -314,8 +343,9 @@ def process_single_question(question):
         )
         return response.text.strip()
     except Exception as e:
-        print(f"<strong>Error during Gemini API call:</strong> {e}")
-        return "<strong>I couldn't process your request. Please try again later.</strong>"
+        print(f"Error during Gemini API call: {e}")
+        return "I couldn't process your request. Please try again later."
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
