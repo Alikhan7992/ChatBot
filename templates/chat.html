@@ -96,6 +96,14 @@
         .logout-btn:hover {
             background: #c0392b;
         }
+
+        .guest-badge {
+            background: #95a5a6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
         
         .main-container {
             display: flex;
@@ -178,7 +186,7 @@
             color: var(--primary);
         }
 
-        /* Updated Chat Messages Styles */
+        /* Chat Messages Styles */
         .chat-messages {
             flex: 1;
             padding: 1rem;
@@ -214,12 +222,33 @@
         }
 
         .message-header {
-            background-color: #f0f0f0;
-            padding: 0.75rem 1rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            background-color: #f0f0f0;
+            padding: 0.75rem 1rem;
             border-bottom: 1px solid #e5e5e6;
+        }
+
+        .message-actions {
+            display: flex;
+            margin-left: auto;
+            gap: 0.5rem;
+        }
+
+        .copy-btn, .share-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .copy-btn:hover, .share-btn:hover {
+            color: var(--secondary);
         }
 
         .message-content {
@@ -277,23 +306,7 @@
             padding: 0 1rem 0.5rem;
         }
 
-        .copy-btn {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: #666;
-            cursor: pointer;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .copy-btn:hover {
-            color: var(--secondary);
-        }
-
-        /* Updated Chat Input Styles */
+        /* Chat Input Styles */
         .chat-input-container {
             padding: 1rem;
             background-color: white;
@@ -375,77 +388,6 @@
             text-decoration: underline;
         }
         
-        /* Details modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 2rem;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-        
-        .modal h3 {
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .form-group select, .form-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .modal-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .modal-btn-primary {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-        }
-        
-        .modal-btn-secondary {
-            background-color: #f1f1f1;
-            color: var(--dark);
-            border: none;
-        }
-        
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -481,25 +423,23 @@
             .chat-container {
                 height: calc(100vh - 200px);
             }
-            
-            .modal-content {
-                margin: 20% auto;
-                width: 90%;
-            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="https://www.jamiahamdard.edu/images/logo.png" alt="Jamia Hamdard Logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmAzpKuJMGvJR9rvJN7G7mc3bYZDRFSqyDljWQYt8YkfQRNPJlmUE2egv6b0gfURvV8A&usqp=CAU" alt="Jamia Hamdard Logo">
             <div class="logo-text">
                 <h1>Jamia Hamdard</h1>
                 <p>Admission Assistant Portal</p>
             </div>
         </div>
         <div class="user-info">
-            <span>Welcome, <span id="usernameDisplay"></span></span>
+            <span>Welcome, <span id="usernameDisplay">{{ username }}</span></span>
+            {% if is_guest %}
+            <span id="guestBadge" class="guest-badge">Guest</span>
+            {% endif %}
             <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
     </header>
@@ -509,16 +449,16 @@
             <div class="sidebar-content">
                 <div class="quick-questions">
                     <h2><i class="fas fa-bolt"></i> Quick Questions</h2>
-                    <div class="quick-question" data-question="What is the admission process?">What is the admission process?</div>
-                    <div class="quick-question" data-question="What courses are offered?">What courses are offered?</div>
+                    <div class="quick-question" data-question="What is the admission process in Jamia Hamdard?">What is the admission process?</div>
+                    <div class="quick-question" data-question="What courses are offered in Jamia Hamdard?">What courses are offered?</div>
                     <div class="quick-question" data-question="Where can I find the prospectus?">Where can I find the prospectus?</div>
-                    <div class="quick-question" data-question="What are the eligibility criteria for B.Tech?">What are the eligibility criteria for B.Tech?</div>
-                    <div class="quick-question" data-question="What is the fee structure for MBA?">What is the fee structure for MBA?</div>
-                    <div class="quick-question" data-question="How can I apply for admission?">How can I apply for admission?</div>
+                    <div class="quick-question" data-question="What are the eligibility criteria for B.Tech in Jamia Hamdard?">What are the eligibility criteria for B.Tech?</div>
+                    <div class="quick-question" data-question="What is the fee structure for MBA in Jamia Hamdard?">What is the fee structure for MBA?</div>
+                    <div class="quick-question" data-question="How can I apply for admission in Jamia Hamdard?">How can I apply for admission?</div>
                     <div class="quick-question" data-question="📍 Where is the campus location?">📍 Where is the campus located?</div>
-                    <div class="quick-question" data-question="🏠 Is hostel facility available?">🏠 Is hostel facility available?</div>
+                    <div class="quick-question" data-question="🏠 Is hostel facility available in Jamia Hamdard">🏠 Is hostel facility available?</div>
                     <div class="quick-question" data-question="💼 What are the placement stats of Jamia Hamdard?">💼 What are the placement stats of Jamia Hamdard?</div>
-                    <div class="quick-question" data-question="📞 How can I contact the admission office?">📞 How can I contact the admission office?</div>
+                    <div class="quick-question" data-question="📞 How can I contact the admission office in Jamia Hamdard">📞 How can I contact the admission office?</div>
                     <div class="quick-question" data-question="Show campus picture">Show campus picture</div>
                 </div>
                 
@@ -540,9 +480,14 @@
                     <div class="message-header">
                         <i class="fas fa-robot"></i>
                         <span>Jamia Hamdard Assistant</span>
-                        <button class="copy-btn">
-                            <i class="far fa-copy"></i> Copy
-                        </button>
+                        <div class="message-actions">
+                            <button class="copy-btn">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                            <button class="share-btn">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
                     </div>
                     <div class="message-content">
                         <b>Welcome to Jamia Hamdard Admission Assistant! How can I help you today?</b>
@@ -563,60 +508,33 @@
                     <button class="option-btn" id="newChatBtn">
                         <i class="fas fa-plus"></i> New Chat
                     </button>
-                   
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Details Collection Modal -->
-    <div id="detailsModal" class="modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-info-circle"></i> Please provide admission details</h3>
-            <form id="detailsForm">
-                <div class="form-group">
-                    <label for="program">Program of Interest:</label>
-                    <select id="program" name="program" required>
-                        <option value="">-- Select Program --</option>
-                        <option value="B.Pharm">B.Pharm</option>
-                        <option value="MBA">MBA</option>
-                        <option value="BA LLB">BA LLB</option>
-                        <option value="B.Tech">B.Tech</option>
-                        <option value="BBA">BBA</option>
-                        <option value="M.Tech">M.Tech</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select id="category" name="category" required>
-                        <option value="General">General</option>
-                        <option value="Muslim Minority">Muslim Minority</option>
-                        <option value="SC/ST">SC/ST</option>
-                        <option value="OBC">OBC</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="year">Year of Admission:</label>
-                    <select id="year" name="year" required>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                    </select>
-                </div>
-                
-                <div class="modal-buttons">
-                    <button type="button" class="modal-btn modal-btn-secondary" id="cancelDetails">Cancel</button>
-                    <button type="submit" class="modal-btn modal-btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
-        // Display username
-        document.getElementById('usernameDisplay').textContent = localStorage.getItem('username') || 'User';
-        
+        // Display username and guest status
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the guest status from the hidden input or data attribute
+            const guestStatusElement = document.getElementById('guestStatus');
+            const isGuest = guestStatusElement ? guestStatusElement.value === 'true' : false;
+            
+            // Disable certain features for guest users
+            if (isGuest) {
+                const batchMode = document.getElementById('batchMode');
+                const uploadBtn = document.getElementById('uploadBtn');
+                const batchQuestions = document.querySelector('.batch-questions');
+                
+                if (batchMode) batchMode.disabled = true;
+                if (uploadBtn) uploadBtn.disabled = true;
+                if (batchQuestions) {
+                    batchQuestions.style.opacity = '0.5';
+                    batchQuestions.style.pointerEvents = 'none';
+                }
+            }
+        });
+                
         // Logout functionality
         document.getElementById('logoutBtn').addEventListener('click', function() {
             fetch('/logout', {
@@ -631,17 +549,9 @@
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
-        const batchMode = document.getElementById('batchMode');
         const batchQuestions = document.getElementById('batchQuestions');
         const submitBatch = document.getElementById('submitBatch');
-        const detailsModal = document.getElementById('detailsModal');
-        const detailsForm = document.getElementById('detailsForm');
-        const cancelDetails = document.getElementById('cancelDetails');
         const newChatBtn = document.getElementById('newChatBtn');
-        const uploadBtn = document.getElementById('uploadBtn');
-        
-        // Store the pending question that triggered the details modal
-        let pendingQuestion = null;
         
         // Enable/disable send button based on input
         userInput.addEventListener('input', function() {
@@ -680,9 +590,14 @@
                     <div class="message-header">
                         <i class="fas fa-robot"></i>
                         <span>Jamia Hamdard Assistant</span>
-                        <button class="copy-btn">
-                            <i class="far fa-copy"></i> Copy
-                        </button>
+                        <div class="message-actions">
+                            <button class="copy-btn">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                            <button class="share-btn">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
                     </div>
                     <div class="message-content">
                         <b>Welcome to Jamia Hamdard Admission Assistant! How can I help you today?</b>
@@ -690,11 +605,6 @@
                     <div class="message-time">Just now</div>
                 </div>
             `;
-        });
-        
-        // Upload button (placeholder functionality)
-        uploadBtn.addEventListener('click', function() {
-            alert("Upload functionality will be implemented soon!");
         });
         
         // Send message function
@@ -710,97 +620,9 @@
             userInput.style.height = 'auto';
             sendBtn.disabled = true;
             
-            // Check if we need details for this question
-            if (needsDetails(message) && !hasDetails()) {
-                pendingQuestion = message;
-                showDetailsModal();
-                return;
-            }
-            
             // Send to server
             processQuestion(message);
         }
-        
-        // Check if a question requires admission details
-        function needsDetails(question) {
-            const lowerQuestion = question.toLowerCase();
-            return lowerQuestion.includes('fee') || 
-                   lowerQuestion.includes('admission') || 
-                   lowerQuestion.includes('eligibility') || 
-                   lowerQuestion.includes('program');
-        }
-        
-        // Check if we have stored details
-        function hasDetails() {
-            return localStorage.getItem('program') && 
-                   localStorage.getItem('category') && 
-                   localStorage.getItem('year');
-        }
-        
-        // Show details collection modal
-        function showDetailsModal() {
-            detailsModal.style.display = 'block';
-            
-            // Pre-fill if we have existing details
-            if (hasDetails()) {
-                document.getElementById('program').value = localStorage.getItem('program');
-                document.getElementById('category').value = localStorage.getItem('category');
-                document.getElementById('year').value = localStorage.getItem('year');
-            }
-        }
-        
-        // Hide details modal
-        function hideDetailsModal() {
-            detailsModal.style.display = 'none';
-        }
-        
-        // Handle details form submission
-        detailsForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const program = document.getElementById('program').value;
-            const category = document.getElementById('category').value;
-            const year = document.getElementById('year').value;
-            
-            // Save to localStorage
-            localStorage.setItem('program', program);
-            localStorage.setItem('category', category);
-            localStorage.setItem('year', year);
-            
-            // Send to server
-            fetch('/submit_details', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    program: program,
-                    category: category,
-                    year: year
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    hideDetailsModal();
-                    
-                    // Add confirmation message
-                    addMessage(`Admission details saved for ${program} (${year})`, 'bot');
-                    
-                    // Process the pending question if we have one
-                    if (pendingQuestion) {
-                        processQuestion(pendingQuestion);
-                        pendingQuestion = null;
-                    }
-                }
-            });
-        });
-        
-        // Cancel details collection
-        cancelDetails.addEventListener('click', function() {
-            hideDetailsModal();
-            pendingQuestion = null;
-        });
         
         // Process a question (send to server and handle response)
         function processQuestion(question) {
@@ -815,11 +637,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.needs_details) {
-                    pendingQuestion = question;
-                    showDetailsModal();
-                }
-                else if (data.map_redirect) {
+                if (data.map_redirect) {
                     // Create a clickable map link
                     const mapMessage = `${data.response} <a class="map-link" onclick="window.open('${data.map_redirect}', '_blank')">View on Map</a>`;
                     addMessage(mapMessage, 'bot');
@@ -841,9 +659,14 @@
                     headerDiv.innerHTML = `
                         <i class="fas fa-robot"></i>
                         <span>Jamia Hamdard Assistant</span>
-                        <button class="copy-btn">
-                            <i class="far fa-copy"></i> Copy
-                        </button>
+                        <div class="message-actions">
+                            <button class="copy-btn">
+                                <i class="far fa-copy"></i> Copy
+                            </button>
+                            <button class="share-btn">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
                     `;
                     
                     const contentDiv = document.createElement('div');
@@ -930,9 +753,14 @@
                 headerDiv.innerHTML = `
                     <i class="fas fa-robot"></i>
                     <span>Jamia Hamdard Assistant</span>
-                    <button class="copy-btn">
-                        <i class="far fa-copy"></i> Copy
-                    </button>
+                    <div class="message-actions">
+                        <button class="copy-btn">
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                        <button class="share-btn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
                 `;
                 
                 // Add copy functionality
@@ -943,6 +771,33 @@
                     setTimeout(() => {
                         copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
                     }, 2000);
+                });
+
+                // Add share functionality
+                const shareBtn = headerDiv.querySelector('.share-btn');
+                shareBtn.addEventListener('click', () => {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'Jamia Hamdard Info',
+                            text: text,
+                            url: window.location.href
+                        }).catch(err => {
+                            console.error('Share failed:', err);
+                            alert('Sharing failed. Please try again.');
+                        });
+                    } else {
+                        // Fallback for browsers without Web Share API
+                        const tempInput = document.createElement('textarea');
+                        tempInput.value = `${text}\n\nShared from Jamia Hamdard Admission Portal: ${window.location.href}`;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        setTimeout(() => {
+                            shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share';
+                        }, 2000);
+                    }
                 });
             } else {
                 // User message header
@@ -959,12 +814,8 @@
             contentDiv.className = 'message-content';
             
             if (sender === 'bot') {
-                // Check for special messages (like saved details)
-                if (text.startsWith('Admission details saved')) {
-                    contentDiv.innerHTML = `<p style="color: var(--success);"><i class="fas fa-check-circle"></i> ${text}</p>`;
-                } 
                 // Check for map links
-                else if (text.includes('map-link')) {
+                if (text.includes('map-link')) {
                     contentDiv.innerHTML = text;
                 }
                 else {
